@@ -1,0 +1,484 @@
+{
+  "logs": [
+    {
+      "id": "50be69f6-c24",
+      "action": "register",
+      "details": "Nouvelle inscription: nabiljouat2@gmail.com",
+      "user": "system",
+      "date": "2026-05-21T20:37:56.858857",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "d69afc64-a21",
+      "action": "register",
+      "details": "Nouvelle inscription: ibnouennadrenabil@gmail.com",
+      "user": "system",
+      "date": "2026-05-21T20:46:56.864275",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "32fc285f-374",
+      "action": "verify",
+      "details": "Compte vérifié: ibnouennadrenabil@gmail.com",
+      "user": "system",
+      "date": "2026-05-21T20:47:48.297443",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "1dc632a4-21e",
+      "action": "login",
+      "details": "Connexion réussie: ibnouennadrenabil@gmail.com / Successful login: ibnouennadrenabil@gmail.com",
+      "user": "ibnouennadrenabil@gmail.com",
+      "date": "2026-05-21T20:48:03.778963",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "31c814d2-e49",
+      "action": "logout",
+      "details": "Déconnexion: ibnouennadrenabil@gmail.com",
+      "user": "ibnouennadrenabil@gmail.com",
+      "date": "2026-05-21T20:56:37.773889",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "0533e3f8-c2c",
+      "action": "login",
+      "details": "Connexion réussie: ibnouennadrenabil@gmail.com / Successful login: ibnouennadrenabil@gmail.com",
+      "user": "ibnouennadrenabil@gmail.com",
+      "date": "2026-05-21T21:00:10.649601",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "c10084ff-b8f",
+      "action": "new_request",
+      "details": "Nouvelle demande: Mathématiques par ibnouennadrenabil@gmail.com",
+      "user": "ibnouennadrenabil@gmail.com",
+      "date": "2026-05-21T21:01:57.142503",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "e3b169da-049",
+      "action": "logout",
+      "details": "Déconnexion: ibnouennadrenabil@gmail.com",
+      "user": "ibnouennadrenabil@gmail.com",
+      "date": "2026-05-21T21:10:15.778282",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "752aff07-5f4",
+      "action": "login",
+      "details": "Connexion réussie: ibnouennadrenabil@gmail.com / Successful login: ibnouennadrenabil@gmail.com",
+      "user": "ibnouennadrenabil@gmail.com",
+      "date": "2026-05-21T21:13:29.958450",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "8234fa25-b37",
+      "action": "logout",
+      "details": "Déconnexion: ibnouennadrenabil@gmail.com",
+      "user": "ibnouennadrenabil@gmail.com",
+      "date": "2026-05-21T22:28:43.222626",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "4a447376-a94",
+      "action": "login",
+      "details": "Connexion réussie: ibnouennadrenabil@gmail.com / Successful login: ibnouennadrenabil@gmail.com",
+      "user": "ibnouennadrenabil@gmail.com",
+      "date": "2026-05-21T22:32:16.584863",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "8c8ca085-c85",
+      "action": "logout",
+      "details": "Déconnexion: nabiljouat2@gmail.com",
+      "user": "nabiljouat2@gmail.com",
+      "date": "2026-05-21T23:25:15.806326",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "a8931cea-a41",
+      "action": "login",
+      "details": "Connexion réussie: nabiljouat602@gmail.com / Successful login: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-21T23:28:16.058834",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "fa8bacca-ea0",
+      "action": "logout",
+      "details": "Déconnexion: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-21T23:30:34.378332",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "13510f82-da1",
+      "action": "login",
+      "details": "Connexion réussie: nabiljouat602@gmail.com / Successful login: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-21T23:34:06.823833",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "9d69b520-070",
+      "action": "logout",
+      "details": "Déconnexion: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-21T23:36:06.195259",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "59f6db57-601",
+      "action": "login",
+      "details": "Connexion réussie: nabiljouat602@gmail.com / Successful login: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-21T23:36:44.333834",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "a67f38d4-7a1",
+      "action": "complete_presentation",
+      "details": "Présentation BC-605086 générée pour f58d88ea-c50",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-21T23:38:49.747931",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "3d0931a2-88d",
+      "action": "logout",
+      "details": "Déconnexion: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-21T23:39:17.915753",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "93659b69-e1a",
+      "action": "login",
+      "details": "Connexion réussie: ibnouennadrenabil@gmail.com / Successful login: ibnouennadrenabil@gmail.com",
+      "user": "ibnouennadrenabil@gmail.com",
+      "date": "2026-05-21T23:39:48.688349",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "3ad83e1f-b03",
+      "action": "register",
+      "details": "Nouvelle inscription: horefi18@gmail.com",
+      "user": "system",
+      "date": "2026-05-21T23:42:20.131742",
+      "ip": "192.168.11.103"
+    },
+    {
+      "id": "f8a3e539-cce",
+      "action": "verify",
+      "details": "Compte vérifié: horefi18@gmail.com",
+      "user": "system",
+      "date": "2026-05-21T23:42:48.608874",
+      "ip": "192.168.11.103"
+    },
+    {
+      "id": "edbbd9a3-627",
+      "action": "login",
+      "details": "Connexion réussie: horefi18@gmail.com / Successful login: horefi18@gmail.com",
+      "user": "horefi18@gmail.com",
+      "date": "2026-05-21T23:43:02.419470",
+      "ip": "192.168.11.103"
+    },
+    {
+      "id": "d8b66f0c-4b1",
+      "action": "new_request",
+      "details": "Nouvelle demande: Arabe par horefi18@gmail.com",
+      "user": "horefi18@gmail.com",
+      "date": "2026-05-21T23:44:06.316728",
+      "ip": "192.168.11.103"
+    },
+    {
+      "id": "ecf15af2-7b2",
+      "action": "logout",
+      "details": "Déconnexion: horefi18@gmail.com",
+      "user": "horefi18@gmail.com",
+      "date": "2026-05-21T23:44:26.917171",
+      "ip": "192.168.11.103"
+    },
+    {
+      "id": "b6131c91-e48",
+      "action": "register",
+      "details": "Nouvelle inscription: H.ibnouennadre@gmail.com",
+      "user": "system",
+      "date": "2026-05-21T23:49:16.166935",
+      "ip": "192.168.11.104"
+    },
+    {
+      "id": "dc68acce-1a4",
+      "action": "verify",
+      "details": "Compte vérifié: H.ibnouennadre@gmail.com",
+      "user": "system",
+      "date": "2026-05-21T23:50:18.327711",
+      "ip": "192.168.11.104"
+    },
+    {
+      "id": "bb1a12cd-6ed",
+      "action": "login",
+      "details": "Connexion réussie: H.ibnouennadre@gmail.com / Successful login: H.ibnouennadre@gmail.com",
+      "user": "H.ibnouennadre@gmail.com",
+      "date": "2026-05-21T23:50:27.800011",
+      "ip": "192.168.11.104"
+    },
+    {
+      "id": "9e66fe66-f44",
+      "action": "new_request",
+      "details": "Nouvelle demande: MEDOUM31 SYSTEM par H.ibnouennadre@gmail.com",
+      "user": "H.ibnouennadre@gmail.com",
+      "date": "2026-05-21T23:52:22.261328",
+      "ip": "192.168.11.104"
+    },
+    {
+      "id": "48aa7ab4-c41",
+      "action": "logout",
+      "details": "Déconnexion: H.ibnouennadre@gmail.com",
+      "user": "H.ibnouennadre@gmail.com",
+      "date": "2026-05-21T23:52:40.028136",
+      "ip": "192.168.11.104"
+    },
+    {
+      "id": "6c7a3e67-55c",
+      "action": "login",
+      "details": "Connexion réussie: nabiljouat602@gmail.com / Successful login: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-21T23:53:08.698386",
+      "ip": "192.168.11.104"
+    },
+    {
+      "id": "703d0972-17b",
+      "action": "logout",
+      "details": "Déconnexion: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-21T23:55:50.551376",
+      "ip": "192.168.11.104"
+    },
+    {
+      "id": "59bfee54-73b",
+      "action": "logout",
+      "details": "Déconnexion: ibnouennadrenabil@gmail.com",
+      "user": "ibnouennadrenabil@gmail.com",
+      "date": "2026-05-21T23:57:00.532973",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "96787307-065",
+      "action": "login",
+      "details": "Connexion réussie: nabiljouat602@gmail.com / Successful login: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-21T23:57:16.950782",
+      "ip": "192.168.11.104"
+    },
+    {
+      "id": "d43e3c29-7fd",
+      "action": "login",
+      "details": "Connexion réussie: nabiljouat602@gmail.com / Successful login: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-21T23:57:29.359645",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "d3024ae0-8e0",
+      "action": "logout",
+      "details": "Déconnexion: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-21T23:59:08.292851",
+      "ip": "192.168.11.104"
+    },
+    {
+      "id": "3e0062f2-558",
+      "action": "login",
+      "details": "Connexion réussie: nabiljouat602@gmail.com / Successful login: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T00:08:13.572106",
+      "ip": "192.168.11.103"
+    },
+    {
+      "id": "f73000a6-d05",
+      "action": "login",
+      "details": "Connexion réussie: nabiljouat602@gmail.com / Successful login: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T11:45:55.584539",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "17d9ea40-bee",
+      "action": "update_status",
+      "details": "Demande b3be8833-923: completed",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T11:46:10.730185",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "9e09306e-35a",
+      "action": "complete_presentation",
+      "details": "Présentation BC-298923 générée pour b3be8833-923",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T11:46:33.069707",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "a3e0fa77-0e2",
+      "action": "send_message",
+      "details": "Message envoyé pour b3be8833-923",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T11:46:55.628809",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "20377454-b02",
+      "action": "logout",
+      "details": "Déconnexion: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T11:47:09.891153",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "7c1c7ffe-d84",
+      "action": "login",
+      "details": "Connexion réussie: horefi18@gmail.com / Successful login: horefi18@gmail.com",
+      "user": "horefi18@gmail.com",
+      "date": "2026-05-22T11:47:39.005523",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "dee8f22e-523",
+      "action": "login",
+      "details": "Connexion réussie: nabiljouat602@gmail.com / Successful login: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T11:50:21.341378",
+      "ip": "192.168.11.103"
+    },
+    {
+      "id": "1a267258-978",
+      "action": "update_status",
+      "details": "Demande aa2c1c8a-971: in_progress",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T11:50:40.947928",
+      "ip": "192.168.11.103"
+    },
+    {
+      "id": "037ce07b-6bd",
+      "action": "complete_presentation",
+      "details": "Présentation BC-656814 générée pour aa2c1c8a-971",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T11:50:53.809689",
+      "ip": "192.168.11.103"
+    },
+    {
+      "id": "42ce73c3-147",
+      "action": "login",
+      "details": "Connexion réussie: horefi18@gmail.com / Successful login: horefi18@gmail.com",
+      "user": "horefi18@gmail.com",
+      "date": "2026-05-22T11:51:25.962536",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "2371bc3c-948",
+      "action": "logout",
+      "details": "Déconnexion: horefi18@gmail.com",
+      "user": "horefi18@gmail.com",
+      "date": "2026-05-22T11:52:01.066222",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "8ed62a5e-685",
+      "action": "login",
+      "details": "Connexion réussie: nabiljouat602@gmail.com / Successful login: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T12:12:41.365055",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "a57fa8d4-528",
+      "action": "logout",
+      "details": "Déconnexion: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T12:24:02.029573",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "66e130c3-490",
+      "action": "login",
+      "details": "Connexion réussie: horefi18@gmail.com / Successful login: horefi18@gmail.com",
+      "user": "horefi18@gmail.com",
+      "date": "2026-05-22T12:40:37.225816",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "ab00d194-b29",
+      "action": "logout",
+      "details": "Déconnexion: horefi18@gmail.com",
+      "user": "horefi18@gmail.com",
+      "date": "2026-05-22T12:47:26.073435",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "0ae250db-f86",
+      "action": "new_request",
+      "details": "Nouvelle demande: FR par horefi18@gmail.com",
+      "user": "horefi18@gmail.com",
+      "date": "2026-05-22T12:50:01.273292",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "8b563494-9c7",
+      "action": "login",
+      "details": "Connexion réussie: nabiljouat602@gmail.com / Successful login: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T12:51:00.299354",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "868e51d1-0c3",
+      "action": "logout",
+      "details": "Déconnexion: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T13:00:48.129726",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "cb585b96-122",
+      "action": "logout",
+      "details": "Déconnexion: horefi18@gmail.com",
+      "user": "horefi18@gmail.com",
+      "date": "2026-05-22T13:10:01.582549",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "f50f2b25-678",
+      "action": "login",
+      "details": "Connexion réussie: nabiljouat602@gmail.com / Successful login: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T13:10:19.387950",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "8d738e0a-2e5",
+      "action": "logout",
+      "details": "Déconnexion: nabiljouat602@gmail.com",
+      "user": "nabiljouat602@gmail.com",
+      "date": "2026-05-22T13:12:09.938802",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "4c397ea8-eb7",
+      "action": "login",
+      "details": "Connexion réussie: horefi18@gmail.com / Successful login: horefi18@gmail.com",
+      "user": "horefi18@gmail.com",
+      "date": "2026-05-22T13:12:27.476253",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "b506e2c5-231",
+      "action": "logout",
+      "details": "Déconnexion: horefi18@gmail.com",
+      "user": "horefi18@gmail.com",
+      "date": "2026-05-22T13:22:42.856082",
+      "ip": "127.0.0.1"
+    }
+  ]
+}

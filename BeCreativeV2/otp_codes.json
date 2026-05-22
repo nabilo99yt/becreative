@@ -1,0 +1,12 @@
+{
+  "codes": [
+    {
+      "email": "nabiljouat2@gmail.com",
+      "code": "838519",
+      "expires": "2026-05-21T20:47:48.556341",
+      "type": "verification",
+      "attempts": 0,
+      "max_attempts": 5
+    }
+  ]
+}

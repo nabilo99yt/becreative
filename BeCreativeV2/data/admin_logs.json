@@ -1,0 +1,36 @@
+{
+  "logs": [
+    {
+      "id": "ffe76f29-f55",
+      "action": "logout",
+      "details": "Deconnexion: ibnouennadrenabil@gmail.com",
+      "user": "ibnouennadrenabil@gmail.com",
+      "date": "2026-05-21T23:10:03.704405",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "357924bf-948",
+      "action": "register",
+      "details": "Nouvelle inscription: nabiljouat2@gmail.com",
+      "user": "system",
+      "date": "2026-05-21T23:13:12.962448",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "1259e336-543",
+      "action": "verify",
+      "details": "Compte verifie: nabiljouat2@gmail.com",
+      "user": "system",
+      "date": "2026-05-21T23:14:05.236926",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": "6f3b69ba-c66",
+      "action": "login",
+      "details": "Connexion reussie: nabiljouat2@gmail.com",
+      "user": "nabiljouat2@gmail.com",
+      "date": "2026-05-21T23:14:16.888495",
+      "ip": "127.0.0.1"
+    }
+  ]
+}

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeCreative - Paiement Binance</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --accent: #f0b90b;
+            --accent-dark: #e5a800;
+            --accent-light: #fcd535;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --success-dark: #16a34a;
+            --success-light: #f0fdf4;
+            --success-border: #bbf7d0;
+            --error: #ef4444;
+            --error-light: #fef2f2;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-md: 0 10px 25px rgba(0,0,0,0.08);
+            --shadow-lg: 0 20px 50px rgba(0,0,0,0.1);
+            --shadow-xl: 0 25px 60px rgba(0,0,0,0.12);
+            --radius-xs: 6px;
+            --radius-sm: 10px;
+            --radius: 16px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(180deg, #1e2026 0%, #0b0e11 100%);
+            color: #eaecef;
+            min-height: 100vh;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #processing-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(11,14,17,0.97);
+            backdrop-filter: blur(30px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+        #processing-overlay.active { display: flex; }
+        .processing-spinner { width: 80px; height: 80px; position: relative; }
+        .spinner-ring { position: absolute; border-radius: 50%; border: 3px solid transparent; animation: spin 1.2s linear infinite; }
+        .spinner-ring.ring-1 { width: 100%; height: 100%; border-top-color: var(--accent); border-right-color: var(--accent); }
+        .spinner-ring.ring-2 { width: 70%; height: 70%; top: 15%; left: 15%; border-top-color: var(--accent-light); animation-duration: 0.8s; animation-direction: reverse; }
+        .spinner-ring.ring-3 { width: 40%; height: 40%; top: 30%; left: 30%; border-bottom-color: #eaecef; animation-duration: 0.5s; }
+        .processing-text { margin-top: 25px; font-size: 1.1rem; color: var(--accent); letter-spacing: 1.5px; font-weight: 600; }
+        .processing-dots::after { content: ''; animation: dots 1.5s steps(4, end) infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes dots { 0%{content:'';} 25%{content:'.';} 50%{content:'..';} 75%{content:'...';} 100%{content:'';} }
+
+        #success-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(11,14,17,0.98);
+            backdrop-filter: blur(20px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9998;
+            flex-direction: column;
+            animation: fadeIn 0.6s ease;
+        }
+        #success-overlay.active { display: flex; }
+        @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+        .success-content { text-align: center; animation: bounce 0.8s cubic-bezier(0.68,-0.55,0.265,1.55); padding: 40px; max-width: 550px; }
+        @keyframes bounce { 0%{transform:scale(0);opacity:0;} 50%{transform:scale(1.1);} 100%{transform:scale(1);opacity:1;} }
+        .success-circle { width: 130px; height: 130px; margin: 0 auto 30px; background: linear-gradient(135deg,var(--accent),var(--accent-dark)); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 20px 60px rgba(240,185,11,0.4); animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%,100%{box-shadow:0 20px 60px rgba(240,185,11,0.4);} 50%{box-shadow:0 20px 80px rgba(240,185,11,0.7);} }
+        .success-circle svg { width: 60px; height: 60px; }
+        .success-checkmark { stroke-dasharray: 100; stroke-dashoffset: 100; animation: draw 0.6s ease forwards; }
+        @keyframes draw { to{stroke-dashoffset:0;} }
+        .success-title { font-size: 2rem; font-weight: 800; color: var(--accent); margin-bottom: 12px; }
+        .success-message { font-size: 1.05rem; color: #b7bdc4; margin-bottom: 6px; line-height: 1.6; }
+        .hearts { font-size: 2rem; animation: heartBeat 1s ease-in-out infinite; margin: 15px 0; }
+        @keyframes heartBeat { 0%,100%{transform:scale(1);} 50%{transform:scale(1.3);} }
+        .success-actions { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+        .confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9997; }
+        .confetti { position: absolute; width: 10px; height: 10px; animation: confettiFall 4s ease-in forwards; }
+        @keyframes confettiFall { 0%{transform:translateY(-100vh) rotate(0deg);opacity:1;} 100%{transform:translateY(110vh) rotate(720deg);opacity:0;} }
+
+        .btn { padding: 12px 28px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: var(--transition); text-decoration: none; border: none; letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: linear-gradient(135deg,var(--accent),var(--accent-dark)); color: #0b0e11; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(240,185,11,0.4); }
+        .btn-outline { background: transparent; color: var(--accent); border: 2px solid var(--accent); }
+        .btn-outline:hover { background: var(--accent); color: #0b0e11; }
+        .btn-success { background: linear-gradient(135deg,var(--success),var(--success-dark)); color: white; box-shadow: 0 4px 20px rgba(34,197,94,0.3); }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(34,197,94,0.5); }
+
+        .toast {
+            position: fixed; bottom: 30px; right: 30px;
+            padding: 14px 24px; border-radius: var(--radius);
+            color: #0b0e11; font-weight: 600; font-size: 0.85rem;
+            z-index: 9999; animation: slideUp 0.3s ease;
+            box-shadow: var(--shadow-lg); background: var(--accent);
+        }
+        @keyframes slideUp { from{transform:translateY(100px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+
+        .header {
+            background: #1e2026;
+            border-bottom: 1px solid #2b2f36;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .header-logo-icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: #0b0e11; font-weight: 700; font-size: 1.1rem;
+        }
+        .header-logo-text { font-size: 1.3rem; font-weight: 700; color: #eaecef; }
+        .header-logo-text span { color: var(--accent); }
+        .header-bank-logo img { height: 45px; object-fit: contain; }
+
+        .main-content { max-width: 650px; margin: 30px auto; padding: 0 25px 40px; }
+        .page-card {
+            background: #1e2026;
+            border: 1px solid #2b2f36;
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+        }
+        .page-card::before {
+            content: '';
+            display: block;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent));
+            margin: -40px -40px 30px -40px;
+            width: calc(100% + 80px);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        }
+        .page-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; text-align: center; }
+        .page-subtitle { color: #848e9c; font-size: 0.9rem; margin-bottom: 35px; text-align: center; }
+
+        .rib-card {
+            background: #2b2f36;
+            border: 1px solid #3b3f46;
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .rib-header { font-size: 0.85rem; font-weight: 600; color: #848e9c; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; text-align: center; }
+        .rib-info { display: flex; flex-direction: column; gap: 15px; }
+        .rib-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #1e2026; border-radius: var(--radius-sm); border: 1px solid #3b3f46; }
+        .rib-label { font-size: 0.82rem; color: #848e9c; font-weight: 500; }
+        .rib-value { font-size: 0.95rem; font-weight: 700; color: #eaecef; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+        .btn-copy {
+            padding: 6px 14px;
+            background: var(--accent);
+            color: #0b0e11;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .btn-copy:hover { background: var(--accent-light); }
+        .btn-copy.copied { background: var(--success); color: white; }
+
+        .upload-section {
+            background: #2b2f36;
+            border: 2px dashed #3b3f46;
+            border-radius: var(--radius-lg);
+            padding: 35px 30px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .upload-section:hover { border-color: var(--accent); }
+        .upload-icon { font-size: 2.5rem; color: var(--accent); margin-bottom: 15px; }
+        .upload-title { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+        .upload-hint { font-size: 0.8rem; color: #848e9c; margin-bottom: 18px; }
+        .file-name-display {
+            margin-top: 12px;
+            padding: 10px 16px;
+            background: rgba(34,197,94,0.15);
+            border-radius: var(--radius-sm);
+            font-size: 0.82rem;
+            color: var(--success);
+            display: none;
+        }
+        .file-name-display.show { display: inline-block; }
+        .btn-upload {
+            padding: 12px 28px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: #0b0e11;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        .btn-upload:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(240,185,11,0.4); }
+
+        .divider { border-top: 1px solid #2b2f36; margin: 30px 0; }
+        .info-text { text-align: center; color: #848e9c; font-size: 0.8rem; line-height: 1.6; }
+        .crypto-badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
+        .crypto-badge { padding: 6px 14px; background: #2b2f36; border: 1px solid #3b3f46; border-radius: 50px; font-size: 0.78rem; color: var(--accent); font-weight: 600; }
+
+        @media (max-width: 600px) {
+            .page-card { padding: 30px 20px; }
+            .page-card::before { margin: -30px -20px 25px -20px; width: calc(100% + 40px); }
+            .rib-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .rib-value { flex-wrap: wrap; }
+            .header { padding: 15px 20px; }
+            .header-bank-logo img { height: 35px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="processing-overlay">
+        <div class="processing-spinner">
+            <div class="spinner-ring ring-1"></div>
+            <div class="spinner-ring ring-2"></div>
+            <div class="spinner-ring ring-3"></div>
+        </div>
+        <div class="processing-text"><span id="processing-message">Traitement en cours</span><span class="processing-dots"></span></div>
+    </div>
+
+    <div id="success-overlay">
+        <div class="confetti-container" id="confettiContainer"></div>
+        <div class="success-content">
+            <div class="success-circle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#0b0e11" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12" class="success-checkmark"></polyline>
+                </svg>
+            </div>
+            <h2 class="success-title">Merci infiniment !</h2>
+            <p class="success-message">Votre reçu a été envoyé avec succès.</p>
+            <p class="success-message">Nous vérifierons votre transaction dans les plus brefs délais.</p>
+            <div class="hearts">&#10084;&#65039; &#10084;&#65039; &#10084;&#65039;</div>
+            <p class="success-message" style="font-weight:600;color:var(--accent);">Merci pour votre confiance !</p>
+            <div class="success-actions">
+                <button class="btn btn-success" onclick="closeSuccess()">Fermer</button>
+                <a href="/dashboard" class="btn btn-primary">Tableau de bord</a>
+            </div>
+        </div>
+    </div>
+
+    <header class="header">
+        <a href="/" class="header-logo">
+            <div class="header-logo-icon">B</div>
+            <span class="header-logo-text">Be<span>Creative</span></span>
+        </a>
+        <div class="header-bank-logo">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2e1c9KpiQuuXcqVxax5zPgPE6sX8dwS_w7g&s" alt="Binance">
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="page-card">
+            <h1 class="page-title">Paiement par Binance</h1>
+            <p class="page-subtitle">Transférez des crypto-monnaies via Binance Pay</p>
+
+            <div class="rib-card">
+                <div class="rib-header">Informations Binance</div>
+                <div class="rib-info">
+                    <div class="rib-row">
+                        <span class="rib-label">ID Binance</span>
+                        <span class="rib-value">
+                            1070651959
+                            <button class="btn-copy" onclick="copyText(this, '1070651959')">Copier</button>
+                        </span>
+                    </div>
+                    <div class="rib-row">
+                        <span class="rib-label">Plateforme</span>
+                        <span class="rib-value">Binance Pay</span>
+                    </div>
+                    <div class="rib-row">
+                        <span class="rib-label">Crypto acceptées</span>
+                        <span class="rib-value">
+                            <div class="crypto-badges">
+                                <span class="crypto-badge">USDT</span>
+                                <span class="crypto-badge">BNB</span>
+                                <span class="crypto-badge">BUSD</span>
+                                <span class="crypto-badge">USDC</span>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="upload-section">
+                <div class="upload-icon">+</div>
+                <h3 class="upload-title">Téléchargez votre reçu de transaction</h3>
+                <p class="upload-hint">Capture d'écran de la transaction Binance</p>
+                <input type="file" id="receiptFile" accept="image/*,.pdf" style="display:none;" onchange="handleFileUpload(event)">
+                <button class="btn-upload" onclick="document.getElementById('receiptFile').click()">Choisir un fichier</button>
+                <div class="file-name-display" id="fileNameDisplay"></div>
+                <div style="margin-top:15px;">
+                    <button class="btn btn-success" id="submitReceiptBtn" onclick="submitReceipt()" style="display:none;">Envoyer le reçu</button>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+            <p class="info-text">Après vérification de votre paiement, votre présentation sera traitée dans les plus brefs délais. Pour toute question, contactez-nous.</p>
+        </div>
+    </div>
+
+    <script>
+        let selectedFile = null;
+
+        function copyText(btn, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = 'Copié !';
+                btn.classList.add('copied');
+                setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
+                showToast('Copié avec succès !');
+            }).catch(() => { showToast('Erreur lors de la copie'); });
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 10 * 1024 * 1024) { showToast('Fichier trop volumineux (max 10MB)'); return; }
+                selectedFile = file;
+                document.getElementById('fileNameDisplay').textContent = 'Fichier : ' + file.name;
+                document.getElementById('fileNameDisplay').classList.add('show');
+                document.getElementById('submitReceiptBtn').style.display = 'inline-flex';
+            }
+        }
+
+        function submitReceipt() {
+            if (!selectedFile) { showToast('Veuillez sélectionner un fichier'); return; }
+            document.getElementById('processing-message').textContent = 'Envoi du reçu en cours';
+            document.getElementById('processing-overlay').classList.add('active');
+            const formData = new FormData();
+            formData.append('receipt', selectedFile);
+            formData.append('bank', 'Binance');
+            formData.append('binance_id', '1070651959');
+            fetch('/api/upload-receipt', { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('processing-overlay').classList.remove('active');
+                if (data.success) showSuccessOverlay();
+                else showToast('Erreur lors de l\'envoi');
+            })
+            .catch(() => { document.getElementById('processing-overlay').classList.remove('active'); showToast('Erreur de connexion'); });
+        }
+
+        function showSuccessOverlay() { document.getElementById('success-overlay').classList.add('active'); createConfetti(); }
+        function closeSuccess() { document.getElementById('success-overlay').classList.remove('active'); }
+        function createConfetti() {
+            const c = document.getElementById('confettiContainer'); c.innerHTML = '';
+            const colors = ['#f0b90b','#fcd535','#22c55e','#4ade80','#ec4899','#8b5cf6','#3b82f6'];
+            for (let i = 0; i < 100; i++) {
+                const d = document.createElement('div'); d.classList.add('confetti');
+                d.style.left = Math.random() * 100 + '%'; d.style.top = -(Math.random() * 50) + 'px';
+                d.style.width = Math.random() * 12 + 6 + 'px'; d.style.height = Math.random() * 12 + 6 + 'px';
+                d.style.background = colors[Math.floor(Math.random() * colors.length)];
+                d.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                d.style.animationDelay = Math.random() * 2 + 's'; d.style.animationDuration = Math.random() * 3 + 3 + 's';
+                c.appendChild(d);
+            }
+            setTimeout(() => { c.innerHTML = ''; }, 6000);
+        }
+        function showToast(m) {
+            const t = document.createElement('div'); t.className = 'toast'; t.textContent = m;
+            document.body.appendChild(t); setTimeout(() => t.remove(), 3000);
+        }
+    </script>
+</body>
+</html>

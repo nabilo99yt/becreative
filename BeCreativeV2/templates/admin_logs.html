@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeCreative - Journaux d'activité</title>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-light: #3b82f6;
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --info: #3b82f6;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-md: 0 10px 25px rgba(0,0,0,0.08);
+            --shadow-lg: 0 20px 50px rgba(0,0,0,0.1);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #processing-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(30px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+        #processing-overlay.active { display: flex; }
+        .processing-spinner {
+            width: 70px; height: 70px;
+            position: relative;
+        }
+        .spinner-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            animation: spin 1.2s linear infinite;
+        }
+        .spinner-ring.ring-1 {
+            width: 100%; height: 100%;
+            border-top-color: var(--accent);
+            border-right-color: var(--accent);
+        }
+        .spinner-ring.ring-2 {
+            width: 70%; height: 70%;
+            top: 15%; left: 15%;
+            border-top-color: var(--accent-light);
+            animation-duration: 0.8s;
+            animation-direction: reverse;
+        }
+        .spinner-ring.ring-3 {
+            width: 40%; height: 40%;
+            top: 30%; left: 30%;
+            border-bottom-color: var(--text);
+            animation-duration: 0.5s;
+        }
+        .processing-text {
+            margin-top: 25px;
+            color: var(--accent);
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-size: 1rem;
+        }
+        .processing-dots::after { content: ''; animation: dots 1.5s steps(4, end) infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes dots {
+            0% { content: ''; } 25% { content: '.'; }
+            50% { content: '..'; } 75% { content: '...'; }
+            100% { content: ''; }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px; right: 30px;
+            padding: 14px 24px;
+            border-radius: var(--radius);
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            z-index: 9999;
+            animation: slideUp 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+        .toast-success { background: var(--success); }
+        .toast-error { background: var(--error); }
+        .toast-info { background: var(--info); }
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .navbar {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        .logo-icon {
+            width: 34px; height: 34px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+        .btn {
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--accent);
+            border: 1.5px solid var(--accent);
+        }
+        .btn-outline:hover { background: var(--accent); color: white; }
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        .btn-success:hover { background: #16a34a; box-shadow: 0 4px 15px rgba(34,197,94,0.3); }
+        .btn-danger {
+            background: transparent;
+            color: var(--error);
+            border: 1.5px solid var(--error);
+        }
+        .btn-danger:hover { background: var(--error); color: white; }
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+        .btn-warning:hover { background: #d97706; box-shadow: 0 4px 15px rgba(245,158,11,0.3); }
+
+        .main-content {
+            max-width: 1300px;
+            margin: 25px auto;
+            padding: 0 25px 40px;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .page-header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .page-header p { color: var(--text-secondary); font-size: 0.85rem; }
+        .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px;
+            transition: var(--transition);
+        }
+        .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .stat-value { font-size: 2rem; font-weight: 800; color: var(--text); }
+        .stat-value.blue { color: var(--info); }
+        .stat-value.yellow { color: var(--warning); }
+        .stat-value.green { color: var(--success); }
+        .stat-value.red { color: var(--error); }
+
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 11px 16px 11px 42px;
+            border: 1.5px solid var(--border);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            outline: none;
+            transition: var(--transition);
+            background: var(--white);
+        }
+        .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.06); }
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .filter-select {
+            padding: 11px 35px 11px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            outline: none;
+            cursor: pointer;
+            background: var(--white);
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            transition: var(--transition);
+        }
+        .filter-select:focus { border-color: var(--accent); }
+
+        .table-wrapper {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        .table-scroll { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        thead th {
+            background: var(--bg);
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 0.73rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+            transition: var(--transition);
+        }
+        thead th:hover { color: var(--accent); }
+        thead th .sort-icon { margin-left: 4px; font-size: 0.6rem; }
+        tbody td {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+            vertical-align: middle;
+        }
+        tbody tr { transition: var(--transition); }
+        tbody tr:hover { background: #f8fafc; }
+        tbody tr:last-child td { border-bottom: none; }
+
+        .log-id {
+            font-family: 'SF Mono', 'Consolas', monospace;
+            font-size: 0.78rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .log-action-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .badge-login { background: #dbeafe; color: #1e40af; }
+        .badge-register { background: #d1fae5; color: #065f46; }
+        .badge-new_request { background: #fef3c7; color: #92400e; }
+        .badge-update_status { background: #e0e7ff; color: #3730a3; }
+        .badge-complete_presentation { background: #dcfce7; color: #166534; }
+        .badge-send_message { background: #fce7f3; color: #9d174d; }
+        .badge-logout { background: #fee2e2; color: #991b1b; }
+        .badge-verify { background: #d1fae5; color: #065f46; }
+        .badge-reset_password { background: #ffedd5; color: #9a3412; }
+        .badge-usb_copy { background: #e0e7ff; color: #3730a3; }
+
+        .log-details { color: var(--text-secondary); max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .log-user { color: var(--text); font-weight: 500; }
+        .log-date { color: var(--text-muted); font-size: 0.78rem; white-space: nowrap; }
+        .log-ip { color: var(--text-muted); font-size: 0.75rem; font-family: monospace; }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 30px;
+            color: var(--text-muted);
+        }
+        .empty-state h3 { color: var(--text-secondary); margin-bottom: 5px; font-size: 1rem; }
+        .empty-state p { font-size: 0.82rem; }
+
+        .table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .showing-info { font-size: 0.8rem; color: var(--text-muted); }
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .page-btn {
+            padding: 7px 14px;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            background: var(--white);
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+        .page-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .page-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .page-numbers { display: flex; gap: 4px; }
+
+        .admin-footer {
+            text-align: center;
+            padding: 25px;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--border);
+            margin-top: 30px;
+        }
+        .admin-footer strong { color: var(--accent); }
+
+        /* Export Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(15,23,42,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 9998;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 35px;
+            width: 90%;
+            max-width: 480px;
+            box-shadow: var(--shadow-lg);
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+        .modal p { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 25px; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+        .modal .btn-cancel {
+            padding: 10px 22px;
+            border-radius: 50px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+        .modal .btn-cancel:hover { background: var(--border); }
+
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .table-scroll { overflow-x: auto; }
+            table { min-width: 700px; }
+            .log-details { max-width: 150px; }
+            .toolbar { flex-direction: column; }
+            .search-box { width: 100%; }
+            .filter-select { width: 100%; }
+        }
+        @media (max-width: 480px) {
+            .main-content { padding: 0 15px 30px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .page-header h1 { font-size: 1.3rem; }
+            .header-actions { width: 100%; }
+            .header-actions .btn { flex: 1; text-align: center; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div id="processing-overlay">
+        <div class="processing-spinner">
+            <div class="spinner-ring ring-1"></div>
+            <div class="spinner-ring ring-2"></div>
+            <div class="spinner-ring ring-3"></div>
+        </div>
+        <div class="processing-text">
+            <span id="processing-message">Traitement en cours</span>
+            <span class="processing-dots"></span>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal-overlay" id="exportModal">
+        <div class="modal">
+            <h3>Exporter les logs</h3>
+            <p>Choisissez le format d'exportation des données. Les filtres actuels seront appliqués.</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeExportModal()">Annuler</button>
+                <button class="btn btn-success" onclick="exportLogs('csv')">Exporter en CSV</button>
+                <button class="btn btn-success" onclick="exportLogs('excel')">Exporter en Excel</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <div class="logo-icon">B</div>
+                BeCreative
+            </a>
+            <div style="display:flex;align-items:center;gap:15px;">
+                <a href="/admin" class="btn btn-outline">Administration</a>
+                <a href="/dashboard" class="btn btn-outline">Dashboard</a>
+                <a href="/logout" class="btn btn-danger">Déconnexion</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="page-header">
+            <div>
+                <h1>Journaux d'activité</h1>
+                <p>Historique complet des actions sur la plateforme</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-warning" onclick="openExportModal()">Exporter</button>
+                <button class="btn btn-outline" onclick="refreshLogs()">Actualiser</button>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total logs</div>
+                <div class="stat-value blue" id="totalLogs">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Connexions</div>
+                <div class="stat-value green" id="loginLogs">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Demandes</div>
+                <div class="stat-value yellow" id="requestLogs">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Aujourd'hui</div>
+                <div class="stat-value" id="todayLogs">0</div>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <div class="search-box">
+                <span class="search-icon">S</span>
+                <input type="text" class="search-input" placeholder="Rechercher dans les logs..." oninput="filterLogs()" id="searchInput">
+            </div>
+            <select class="filter-select" onchange="filterByAction(this.value)" id="actionFilter">
+                <option value="all">Toutes les actions</option>
+                <option value="login">Connexion</option>
+                <option value="register">Inscription</option>
+                <option value="new_request">Nouvelle demande</option>
+                <option value="update_status">Mise à jour statut</option>
+                <option value="complete_presentation">Présentation terminée</option>
+                <option value="send_message">Message envoyé</option>
+                <option value="logout">Déconnexion</option>
+                <option value="verify">Vérification</option>
+                <option value="reset_password">Reset mot de passe</option>
+                <option value="usb_copy">Copie USB</option>
+            </select>
+        </div>
+
+        <div class="table-wrapper">
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('id')">ID <span class="sort-icon">&#9650;</span></th>
+                            <th onclick="sortTable('action')">Action <span class="sort-icon">&#9650;</span></th>
+                            <th>Détails</th>
+                            <th onclick="sortTable('user')">Utilisateur <span class="sort-icon">&#9650;</span></th>
+                            <th onclick="sortTable('date')">Date <span class="sort-icon">&#9650;</span></th>
+                            <th>IP</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logsTable">
+                        {% for log in logs %}
+                        <tr data-action="{{ log.action }}" data-id="{{ log.id }}" data-user="{{ log.user }}" data-date="{{ log.date }}">
+                            <td><span class="log-id">{{ log.id }}</span></td>
+                            <td><span class="log-action-badge badge-{{ log.action }}">{{ log.action }}</span></td>
+                            <td><span class="log-details" title="{{ log.details }}">{{ log.details }}</span></td>
+                            <td><span class="log-user">{{ log.user }}</span></td>
+                            <td><span class="log-date">{{ log.date[:19] if log.date else '' }}</span></td>
+                            <td><span class="log-ip">{{ log.ip }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if not logs %}
+            <div class="empty-state">
+                <h3>Aucun log</h3>
+                <p>Aucune activité enregistrée pour le moment</p>
+            </div>
+            {% endif %}
+            <div class="table-footer">
+                <span class="showing-info" id="showingInfo">Affichage de tous les logs</span>
+                <div class="pagination">
+                    <button class="page-btn" onclick="changePage(-1)" disabled id="prevBtn">Précédent</button>
+                    <div class="page-numbers" id="pageNumbers"></div>
+                    <button class="page-btn" onclick="changePage(1)" id="nextBtn">Suivant</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-footer">
+            2026 <strong>BeCreative</strong> - Développé par <strong>Nabil JOUAT</strong> - Tous droits réservés
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        let rowsPerPage = 20;
+        let currentActionFilter = 'all';
+        let currentSearchTerm = '';
+        let sortColumn = 'date';
+        let sortDirection = 'desc';
+
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.className = 'toast toast-' + (type || 'info');
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function getVisibleRows() {
+            const rows = document.querySelectorAll('#logsTable tr');
+            return Array.from(rows).filter(row => {
+                const actionMatch = currentActionFilter === 'all' || row.dataset.action === currentActionFilter;
+                const searchMatch = !currentSearchTerm || row.textContent.toLowerCase().includes(currentSearchTerm);
+                return actionMatch && searchMatch;
+            });
+        }
+
+        function updateStats() {
+            const visibleRows = getVisibleRows();
+            document.getElementById('totalLogs').textContent = visibleRows.length;
+            document.getElementById('loginLogs').textContent = visibleRows.filter(r => r.dataset.action === 'login').length;
+            document.getElementById('requestLogs').textContent = visibleRows.filter(r => r.dataset.action === 'new_request').length;
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('todayLogs').textContent = visibleRows.filter(r => {
+                const dateText = r.querySelector('.log-date')?.textContent || '';
+                return dateText.startsWith(today);
+            }).length;
+        }
+
+        function filterLogs() {
+            currentSearchTerm = document.getElementById('searchInput').value.toLowerCase();
+            currentPage = 1;
+            renderPage();
+            updateStats();
+        }
+
+        function filterByAction(action) {
+            currentActionFilter = action;
+            currentPage = 1;
+            renderPage();
+            updateStats();
+        }
+
+        function sortTable(column) {
+            if (sortColumn === column) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortColumn = column;
+                sortDirection = 'asc';
+            }
+            currentPage = 1;
+            renderPage();
+        }
+
+        function getSortedRows(rows) {
+            return rows.sort((a, b) => {
+                let valA, valB;
+                if (sortColumn === 'date') {
+                    valA = a.dataset.date || '';
+                    valB = b.dataset.date || '';
+                } else if (sortColumn === 'id') {
+                    valA = a.dataset.id || '';
+                    valB = b.dataset.id || '';
+                } else if (sortColumn === 'user') {
+                    valA = a.dataset.user || '';
+                    valB = b.dataset.user || '';
+                } else if (sortColumn === 'action') {
+                    valA = a.dataset.action || '';
+                    valB = b.dataset.action || '';
+                } else {
+                    valA = a.textContent || '';
+                    valB = b.textContent || '';
+                }
+                const cmp = valA.localeCompare(valB);
+                return sortDirection === 'asc' ? cmp : -cmp;
+            });
+        }
+
+        function renderPage() {
+            const allRows = document.querySelectorAll('#logsTable tr');
+            allRows.forEach(row => row.style.display = 'none');
+            
+            const visibleRows = getVisibleRows();
+            const sortedRows = getSortedRows(visibleRows);
+            
+            const totalPages = Math.ceil(sortedRows.length / rowsPerPage);
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            
+            sortedRows.forEach((row, index) => {
+                if (index >= start && index < end) {
+                    row.style.display = '';
+                }
+            });
+            
+            document.getElementById('showingInfo').textContent = 
+                sortedRows.length === 0 ? 'Aucun log' :
+                `Affichage de ${start + 1}-${Math.min(end, sortedRows.length)} sur ${sortedRows.length} logs`;
+            
+            document.getElementById('prevBtn').disabled = currentPage <= 1;
+            document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+            
+            renderPageNumbers(totalPages);
+        }
+
+        function renderPageNumbers(totalPages) {
+            const container = document.getElementById('pageNumbers');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= Math.min(totalPages, 7); i++) {
+                const btn = document.createElement('button');
+                btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+                btn.textContent = i;
+                btn.onclick = () => {
+                    currentPage = i;
+                    renderPage();
+                };
+                container.appendChild(btn);
+            }
+        }
+
+        function changePage(delta) {
+            const visibleRows = getVisibleRows();
+            const totalPages = Math.ceil(visibleRows.length / rowsPerPage);
+            currentPage = Math.max(1, Math.min(currentPage + delta, totalPages));
+            renderPage();
+        }
+
+        function openExportModal() {
+            document.getElementById('exportModal').classList.add('active');
+        }
+
+        function closeExportModal() {
+            document.getElementById('exportModal').classList.remove('active');
+        }
+
+        function exportLogs(format) {
+            closeExportModal();
+            
+            const visibleRows = getVisibleRows();
+            if (visibleRows.length === 0) {
+                showToast('Aucune donnée à exporter', 'error');
+                return;
+            }
+            
+            const headers = ['ID', 'Action', 'Détails', 'Utilisateur', 'Date', 'IP'];
+            const data = visibleRows.map(row => {
+                const cells = row.querySelectorAll('td');
+                return [
+                    cells[0]?.textContent?.trim() || '',
+                    cells[1]?.textContent?.trim() || '',
+                    cells[2]?.textContent?.trim() || '',
+                    cells[3]?.textContent?.trim() || '',
+                    cells[4]?.textContent?.trim() || '',
+                    cells[5]?.textContent?.trim() || ''
+                ];
+            });
+            
+            if (format === 'csv') {
+                exportCSV(headers, data);
+            } else {
+                exportExcel(headers, data);
+            }
+        }
+
+        function exportCSV(headers, data) {
+            const BOM = '\uFEFF';
+            let csv = BOM + headers.join(';') + '\n';
+            data.forEach(row => {
+                csv += row.map(cell => '"' + (cell || '').replace(/"/g, '""') + '"').join(';') + '\n';
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            downloadFile(blob, 'logs_becreative.csv');
+            showToast('Export CSV réussi', 'success');
+        }
+
+        function exportExcel(headers, data) {
+            let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">';
+            html += '<head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Logs</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head>';
+            html += '<body><table border="1">';
+            html += '<tr>' + headers.map(h => '<th style="background:#2563eb;color:white;padding:8px;">' + h + '</th>').join('') + '</tr>';
+            data.forEach(row => {
+                html += '<tr>' + row.map(cell => '<td style="padding:6px;">' + cell + '</td>').join('') + '</tr>';
+            });
+            html += '</table></body></html>';
+            
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            downloadFile(blob, 'logs_becreative.xls');
+            showToast('Export Excel réussi', 'success');
+        }
+
+        function downloadFile(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function refreshLogs() {
+            showToast('Actualisation...', 'info');
+            setTimeout(() => { window.location.reload(); }, 500);
+        }
+
+        function init() {
+            updateStats();
+            renderPage();
+            
+            document.getElementById('searchInput').addEventListener('input', filterLogs);
+            document.getElementById('actionFilter').addEventListener('change', function() {
+                filterByAction(this.value);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

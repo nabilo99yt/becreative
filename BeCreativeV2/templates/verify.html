@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeCreative - Verification du compte</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-light: #3b82f6;
+            --accent-lighter: #60a5fa;
+            --accent-soft: #93c5fd;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --error: #ef4444;
+            --error-light: #fef2f2;
+            --error-border: #fecaca;
+            --success: #22c55e;
+            --success-light: #f0fdf4;
+            --success-border: #bbf7d0;
+            --warning: #f59e0b;
+            --warning-light: #fffbeb;
+            --warning-border: #fde68a;
+            --border: #e2e8f0;
+            --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+            --shadow-md: 0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.06);
+            --shadow-lg: 0 20px 50px rgba(0,0,0,0.1), 0 8px 20px rgba(0,0,0,0.08);
+            --shadow-xl: 0 25px 60px rgba(0,0,0,0.12);
+            --radius-xs: 6px;
+            --radius-sm: 10px;
+            --radius: 16px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: relative;
+        }
+
+        .bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(130px);
+            opacity: 0.1;
+            animation: orbFloat 30s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--accent);
+            top: -150px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent-light);
+            bottom: -100px;
+            left: -80px;
+            animation-delay: -10s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent-lighter);
+            top: 50%;
+            left: 40%;
+            animation-delay: -20s;
+            animation-duration: 35s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            25% { transform: translate(60px, -50px) scale(1.1) rotate(90deg); }
+            50% { transform: translate(-40px, 80px) scale(0.9) rotate(180deg); }
+            75% { transform: translate(-70px, -30px) scale(1.05) rotate(270deg); }
+        }
+
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.025;
+            background-image: 
+                linear-gradient(var(--accent) 1px, transparent 1px),
+                linear-gradient(90deg, var(--accent) 1px, transparent 1px);
+            background-size: 70px 70px;
+            animation: gridShift 20s linear infinite;
+        }
+
+        @keyframes gridShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(70px, 35px); }
+        }
+
+        .particle-field {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleRise 10s ease-in infinite;
+        }
+
+        @keyframes particleRise {
+            0% { opacity: 0; transform: translateY(110vh) scale(0); }
+            15% { opacity: 0.6; transform: translateY(70vh) scale(1); }
+            85% { opacity: 0.2; transform: translateY(15vh) scale(0.8); }
+            100% { opacity: 0; transform: translateY(-10vh) scale(0); }
+        }
+
+        /* Processing Overlay */
+        #processing-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+            animation: fadeIn 0.4s ease;
+        }
+
+        #processing-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .processing-spinner {
+            width: 90px;
+            height: 90px;
+            position: relative;
+        }
+
+        .spinner-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            animation: spin 1.2s linear infinite;
+        }
+
+        .spinner-ring.ring-1 {
+            width: 100%;
+            height: 100%;
+            border-top-color: var(--accent);
+            border-right-color: var(--accent);
+        }
+
+        .spinner-ring.ring-2 {
+            width: 72%;
+            height: 72%;
+            top: 14%;
+            left: 14%;
+            border-top-color: var(--accent-light);
+            border-left-color: var(--accent-light);
+            animation-duration: 0.8s;
+            animation-direction: reverse;
+        }
+
+        .spinner-ring.ring-3 {
+            width: 44%;
+            height: 44%;
+            top: 28%;
+            left: 28%;
+            border-bottom-color: var(--text-primary);
+            border-right-color: var(--text-primary);
+            animation-duration: 0.5s;
+        }
+
+        .processing-text {
+            margin-top: 30px;
+            font-size: 1.2rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .processing-subtext {
+            margin-top: 6px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .processing-dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes dots {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+            100% { content: ''; }
+        }
+
+        /* Verify Container */
+        .verify-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 480px;
+            padding: 25px;
+        }
+
+        .verify-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 45px 40px;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition-slow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .verify-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent-lighter), var(--accent-soft));
+        }
+
+        .verify-card:hover {
+            box-shadow: var(--shadow-xl);
+            border-color: var(--accent-soft);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: logoShine 4s ease-in-out infinite;
+        }
+
+        @keyframes logoShine {
+            0%, 100% { transform: rotate(0deg); opacity: 0; }
+            50% { transform: rotate(180deg); opacity: 0.8; }
+        }
+
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .verify-icon {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .verify-icon-circle {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(59,130,246,0.1));
+            border: 2px solid var(--accent-soft);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--accent);
+            animation: verifyPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes verifyPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(37,99,235,0.2); }
+            50% { box-shadow: 0 0 0 20px rgba(37,99,235,0); }
+        }
+
+        .verify-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .verify-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .verify-email {
+            text-align: center;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+            word-break: break-all;
+        }
+
+        /* Messages */
+        .alert {
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 25px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: none;
+            animation: slideIn 0.3s ease;
+            text-align: center;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-error {
+            background: var(--error-light);
+            border: 1px solid var(--error-border);
+            color: var(--error);
+        }
+
+        .alert-success {
+            background: var(--success-light);
+            border: 1px solid var(--success-border);
+            color: var(--success);
+        }
+
+        .alert-warning {
+            background: var(--warning-light);
+            border: 1px solid var(--warning-border);
+            color: var(--warning);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* OTP Inputs */
+        .otp-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .otp-input {
+            width: 55px;
+            height: 65px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: rgba(248, 250, 252, 0.8);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            transition: var(--transition);
+            outline: none;
+            font-family: inherit;
+        }
+
+        .otp-input:focus {
+            border-color: var(--accent);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .otp-input.filled {
+            border-color: var(--accent-light);
+            background: rgba(37, 99, 235, 0.03);
+        }
+
+        .otp-input.error {
+            border-color: var(--error);
+            background: var(--error-light);
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.45);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-submit.loading {
+            pointer-events: none;
+            color: transparent;
+        }
+
+        .btn-submit .btn-spinner {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spinBtn 0.8s linear infinite;
+        }
+
+        .btn-submit.loading .btn-spinner {
+            display: block;
+        }
+
+        @keyframes spinBtn {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .resend-section {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .resend-text {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        .resend-timer {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .btn-resend {
+            background: transparent;
+            color: var(--accent);
+            border: 1.5px solid var(--accent);
+            padding: 10px 28px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            letter-spacing: 0.3px;
+        }
+
+        .btn-resend:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-resend:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .back-links {
+            text-align: center;
+            margin-top: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .back-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .back-links a:hover {
+            color: var(--accent);
+        }
+
+        .language-switch {
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .lang-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 6px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .lang-option {
+            padding: 7px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .lang-option.active {
+            background: var(--accent);
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
+        }
+
+        .lang-option:hover:not(.active) {
+            color: var(--accent);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        @media (max-width: 600px) {
+            .verify-card {
+                padding: 35px 22px;
+                border-radius: var(--radius-lg);
+            }
+
+            .verify-title {
+                font-size: 1.3rem;
+            }
+
+            .otp-container {
+                gap: 8px;
+            }
+
+            .otp-input {
+                width: 45px;
+                height: 55px;
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .verify-wrapper {
+                padding: 15px;
+            }
+
+            .verify-card {
+                padding: 30px 15px;
+            }
+
+            .otp-input {
+                width: 38px;
+                height: 48px;
+                font-size: 1.3rem;
+            }
+
+            .otp-container {
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-layer">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grid-pattern"></div>
+    <div class="particle-field" id="particleField"></div>
+
+    <div id="processing-overlay">
+        <div class="processing-spinner">
+            <div class="spinner-ring ring-1"></div>
+            <div class="spinner-ring ring-2"></div>
+            <div class="spinner-ring ring-3"></div>
+        </div>
+        <div class="processing-text">
+            <span id="processing-message">Verification en cours</span>
+            <span class="processing-dots"></span>
+        </div>
+        <div class="processing-subtext">BeCreative</div>
+    </div>
+
+    <div class="verify-wrapper">
+        <div class="verify-card">
+            <div class="logo-container">
+                <a href="/" class="logo">
+                    <div class="logo-icon">B</div>
+                    <span class="logo-text">Be<span>Creative</span></span>
+                </a>
+            </div>
+
+            <div class="verify-icon">
+                <div class="verify-icon-circle">V</div>
+            </div>
+
+            <h1 class="verify-title" data-fr="Verification du compte" data-en="Account Verification">Verification du compte</h1>
+            <p class="verify-subtitle" data-fr="Code envoye a :" data-en="Code sent to :">Code envoye a :</p>
+            <p class="verify-email" id="verifyEmail"></p>
+
+            <div class="alert alert-error" id="errorAlert"></div>
+            <div class="alert alert-success" id="successAlert"></div>
+            <div class="alert alert-warning" id="warningAlert"></div>
+
+            <form id="verifyForm" method="POST" action="/verify" onsubmit="handleSubmit(event)">
+                <input type="hidden" name="email" id="hiddenEmail">
+                
+                <div class="otp-container" id="otpContainer">
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" data-index="0">
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" data-index="1">
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" data-index="2">
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" data-index="3">
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" data-index="4">
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" data-index="5">
+                </div>
+                <input type="hidden" name="code" id="fullCode">
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <span data-fr="Verifier le code" data-en="Verify code">Verifier le code</span>
+                    <div class="btn-spinner"></div>
+                </button>
+            </form>
+
+            <div class="resend-section">
+                <p class="resend-text">
+                    <span data-fr="Code expirant dans" data-en="Code expiring in">Code expirant dans</span> 
+                    <span class="resend-timer" id="timer">10:00</span>
+                </p>
+                <button class="btn-resend" id="resendBtn" onclick="resendCode()" disabled>
+                    <span data-fr="Renvoyer le code" data-en="Resend code">Renvoyer le code</span>
+                </button>
+            </div>
+
+            <div class="language-switch">
+                <div class="lang-btn">
+                    <button class="lang-option active" data-lang="fr" onclick="switchLanguage('fr')">FR</button>
+                    <button class="lang-option" data-lang="en" onclick="switchLanguage('en')">EN</button>
+                </div>
+            </div>
+
+            <div class="back-links">
+                <a href="/login" data-fr="Retour a la connexion" data-en="Back to login">Retour a la connexion</a>
+                <a href="/" data-fr="Retour a l'accueil" data-en="Back to home">Retour a l'accueil</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            fr: { 
+                processing: 'Verification en cours',
+                expired: 'Code expire',
+                invalid: 'Code incorrect',
+                sent: 'Code renvoye avec succes',
+                error: 'Erreur lors de l\'envoi'
+            },
+            en: { 
+                processing: 'Verification in progress',
+                expired: 'Code expired',
+                invalid: 'Invalid code',
+                sent: 'Code resent successfully',
+                error: 'Error sending code'
+            }
+        };
+
+        let currentLang = 'fr';
+        let countdownInterval;
+        let timeLeft = 600;
+
+        function switchLanguage(lang) {
+            if (currentLang === lang) return;
+            currentLang = lang;
+            
+            document.querySelectorAll('.lang-option').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.lang === lang) btn.classList.add('active');
+            });
+            
+            document.querySelectorAll('[data-fr][data-en]').forEach(el => {
+                el.textContent = el.dataset[lang];
+            });
+            
+            document.documentElement.lang = lang;
+            localStorage.setItem('becreative_lang', lang);
+        }
+
+        function getEmailFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('email') || '';
+        }
+
+        function showError(message) {
+            const alert = document.getElementById('errorAlert');
+            alert.textContent = message;
+            alert.classList.add('show');
+            document.getElementById('successAlert').classList.remove('show');
+            document.getElementById('warningAlert').classList.remove('show');
+        }
+
+        function showSuccess(message) {
+            const alert = document.getElementById('successAlert');
+            alert.textContent = message;
+            alert.classList.add('show');
+            document.getElementById('errorAlert').classList.remove('show');
+            document.getElementById('warningAlert').classList.remove('show');
+        }
+
+        function hideMessages() {
+            document.getElementById('errorAlert').classList.remove('show');
+            document.getElementById('successAlert').classList.remove('show');
+            document.getElementById('warningAlert').classList.remove('show');
+        }
+
+        function startCountdown() {
+            updateTimerDisplay();
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('resendBtn').disabled = false;
+                    document.getElementById('timer').textContent = '00:00';
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+        }
+
+        function resetCountdown() {
+            clearInterval(countdownInterval);
+            timeLeft = 600;
+            document.getElementById('resendBtn').disabled = true;
+            startCountdown();
+        }
+
+        function resendCode() {
+            const email = getEmailFromUrl();
+            if (!email) return;
+            
+            const overlay = document.getElementById('processing-overlay');
+            document.getElementById('processing-message').textContent = 'Envoi en cours';
+            overlay.classList.add('active');
+            
+            fetch('/resend-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'email=' + encodeURIComponent(email) + '&type=verification'
+            })
+            .then(response => response.json())
+            .then(data => {
+                overlay.classList.remove('active');
+                if (data.success) {
+                    showSuccess(translations[currentLang].sent);
+                    resetCountdown();
+                    clearOtpInputs();
+                } else {
+                    showError(data.error || translations[currentLang].error);
+                }
+            })
+            .catch(() => {
+                overlay.classList.remove('active');
+                showError(translations[currentLang].error);
+            });
+        }
+
+        function clearOtpInputs() {
+            document.querySelectorAll('.otp-input').forEach(input => {
+                input.value = '';
+                input.classList.remove('filled', 'error');
+            });
+            document.getElementById('fullCode').value = '';
+            document.querySelector('.otp-input[data-index="0"]').focus();
+        }
+
+        function getFullCode() {
+            let code = '';
+            document.querySelectorAll('.otp-input').forEach(input => {
+                code += input.value;
+            });
+            return code;
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            hideMessages();
+            
+            const code = getFullCode();
+            
+            if (code.length !== 6) {
+                showError(currentLang === 'fr' ? 'Veuillez entrer les 6 chiffres' : 'Please enter all 6 digits');
+                document.querySelectorAll('.otp-input').forEach(input => {
+                    if (!input.value) input.classList.add('error');
+                });
+                return false;
+            }
+            
+            if (!/^\d{6}$/.test(code)) {
+                showError(currentLang === 'fr' ? 'Code invalide' : 'Invalid code');
+                return false;
+            }
+            
+            document.getElementById('fullCode').value = code;
+            document.getElementById('hiddenEmail').value = getEmailFromUrl();
+            
+            const overlay = document.getElementById('processing-overlay');
+            document.getElementById('processing-message').textContent = translations[currentLang].processing;
+            overlay.classList.add('active');
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.classList.add('loading');
+            
+            setTimeout(() => {
+                event.target.submit();
+            }, 1500);
+            
+            return false;
+        }
+
+        function setupOtpInputs() {
+            const inputs = document.querySelectorAll('.otp-input');
+            
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', function(e) {
+                    const value = e.target.value;
+                    
+                    if (value && !/^\d$/.test(value)) {
+                        e.target.value = '';
+                        return;
+                    }
+                    
+                    if (value) {
+                        this.classList.add('filled');
+                        this.classList.remove('error');
+                        if (index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+                    } else {
+                        this.classList.remove('filled');
+                    }
+                });
+                
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && !this.value && index > 0) {
+                        inputs[index - 1].focus();
+                        inputs[index - 1].value = '';
+                        inputs[index - 1].classList.remove('filled');
+                    }
+                    
+                    if (e.key === 'ArrowLeft' && index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                    
+                    if (e.key === 'ArrowRight' && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                });
+                
+                input.addEventListener('paste', function(e) {
+                    e.preventDefault();
+                    const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+                    const digits = pasteData.replace(/\D/g, '').slice(0, 6);
+                    
+                    if (digits.length > 0) {
+                        inputs.forEach((inp, i) => {
+                            if (digits[i]) {
+                                inp.value = digits[i];
+                                inp.classList.add('filled');
+                                inp.classList.remove('error');
+                            }
+                        });
+                        
+                        const focusIndex = Math.min(digits.length, inputs.length - 1);
+                        inputs[focusIndex].focus();
+                    }
+                });
+            });
+            
+            inputs[0].focus();
+        }
+
+        function createParticles() {
+            const container = document.getElementById('particleField');
+            for (let i = 0; i < 25; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = Math.random() * 8 + 8 + 's';
+                const size = Math.random() * 5 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                container.appendChild(particle);
+            }
+        }
+
+        function init() {
+            createParticles();
+            
+            const savedLang = localStorage.getItem('becreative_lang') || 'fr';
+            switchLanguage(savedLang);
+            
+            const email = getEmailFromUrl();
+            document.getElementById('verifyEmail').textContent = email;
+            document.getElementById('hiddenEmail').value = email;
+            
+            if (!email) {
+                document.getElementById('verifyEmail').textContent = 'Email non trouve';
+            }
+            
+            setupOtpInputs();
+            startCountdown();
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

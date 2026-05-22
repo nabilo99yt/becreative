@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: becreative
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        value: becreative_secret_key_2026
+      - key: EMAIL_ADDRESS
+        value: nabiljouat602@gmail.com
+      - key: EMAIL_PASSWORD
+        value: wxtq ojih fsse ikpw
+      - key: GROQ_API_KEY
+        value: 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

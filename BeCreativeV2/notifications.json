@@ -1,0 +1,74 @@
+{
+  "notifications": [
+    {
+      "id": "172bfd7a-306",
+      "user_email": "ibnouennadrenabil@gmail.com",
+      "message": "Votre demande 'Mathématiques' a été créée avec succès",
+      "date": "2026-05-21T21:01:57.145801",
+      "read": false
+    },
+    {
+      "id": "4036362b-fb4",
+      "user_email": "ibnouennadrenabil@gmail.com",
+      "message": "Votre présentation 'Mathématiques' est terminée! Numéro: BC-605086",
+      "date": "2026-05-21T23:38:47.786020",
+      "read": false
+    },
+    {
+      "id": "f47a995a-124",
+      "user_email": "horefi18@gmail.com",
+      "message": "Votre demande 'Arabe' a été créée avec succès",
+      "date": "2026-05-21T23:44:06.317978",
+      "read": true
+    },
+    {
+      "id": "446c7b69-c12",
+      "user_email": "H.ibnouennadre@gmail.com",
+      "message": "Votre demande 'MEDOUM31 SYSTEM' a été créée avec succès",
+      "date": "2026-05-21T23:52:22.263155",
+      "read": false
+    },
+    {
+      "id": "3a72a140-721",
+      "user_email": "horefi18@gmail.com",
+      "message": "Votre demande 'Arabe' est maintenant: completed",
+      "date": "2026-05-22T11:46:10.729039",
+      "read": true
+    },
+    {
+      "id": "163969f4-311",
+      "user_email": "horefi18@gmail.com",
+      "message": "Votre présentation 'Arabe' est terminée! Numéro: BC-298923",
+      "date": "2026-05-22T11:46:30.518889",
+      "read": true
+    },
+    {
+      "id": "674f6a74-294",
+      "user_email": "horefi18@gmail.com",
+      "message": "Message de l'administrateur: Merci pour votre confience à bientot !",
+      "date": "2026-05-22T11:46:55.623725",
+      "read": true
+    },
+    {
+      "id": "98da9143-6ab",
+      "user_email": "H.ibnouennadre@gmail.com",
+      "message": "Votre demande 'MEDOUM31 SYSTEM' est maintenant: in_progress",
+      "date": "2026-05-22T11:50:40.946794",
+      "read": false
+    },
+    {
+      "id": "be81e5eb-d5b",
+      "user_email": "H.ibnouennadre@gmail.com",
+      "message": "Votre présentation 'MEDOUM31 SYSTEM' est terminée! Numéro: BC-656814",
+      "date": "2026-05-22T11:50:51.841386",
+      "read": false
+    },
+    {
+      "id": "2a7db5e6-60c",
+      "user_email": "horefi18@gmail.com",
+      "message": "Votre demande 'FR' a été créée avec succès",
+      "date": "2026-05-22T12:50:01.279611",
+      "read": false
+    }
+  ]
+}

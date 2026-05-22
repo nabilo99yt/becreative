@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeCreative - Inscription</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-light: #3b82f6;
+            --accent-lighter: #60a5fa;
+            --accent-soft: #93c5fd;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --error: #ef4444;
+            --error-light: #fef2f2;
+            --error-border: #fecaca;
+            --success: #22c55e;
+            --success-light: #f0fdf4;
+            --success-border: #bbf7d0;
+            --border: #e2e8f0;
+            --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+            --shadow-md: 0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.06);
+            --shadow-lg: 0 20px 50px rgba(0,0,0,0.1), 0 8px 20px rgba(0,0,0,0.08);
+            --shadow-xl: 0 25px 60px rgba(0,0,0,0.12);
+            --radius-xs: 6px;
+            --radius-sm: 10px;
+            --radius: 16px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: relative;
+        }
+
+        /* Background Animations */
+        .bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(130px);
+            opacity: 0.1;
+            animation: orbFloat 30s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--accent);
+            top: -150px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent-light);
+            bottom: -100px;
+            left: -80px;
+            animation-delay: -10s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent-lighter);
+            top: 50%;
+            left: 40%;
+            animation-delay: -20s;
+            animation-duration: 35s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            25% { transform: translate(60px, -50px) scale(1.1) rotate(90deg); }
+            50% { transform: translate(-40px, 80px) scale(0.9) rotate(180deg); }
+            75% { transform: translate(-70px, -30px) scale(1.05) rotate(270deg); }
+        }
+
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.025;
+            background-image: 
+                linear-gradient(var(--accent) 1px, transparent 1px),
+                linear-gradient(90deg, var(--accent) 1px, transparent 1px);
+            background-size: 70px 70px;
+            animation: gridShift 20s linear infinite;
+        }
+
+        @keyframes gridShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(70px, 35px); }
+        }
+
+        .particle-field {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleRise 10s ease-in infinite;
+        }
+
+        @keyframes particleRise {
+            0% { opacity: 0; transform: translateY(110vh) scale(0); }
+            15% { opacity: 0.6; transform: translateY(70vh) scale(1); }
+            85% { opacity: 0.2; transform: translateY(15vh) scale(0.8); }
+            100% { opacity: 0; transform: translateY(-10vh) scale(0); }
+        }
+
+        /* Processing Overlay */
+        #processing-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+            animation: fadeIn 0.4s ease;
+        }
+
+        #processing-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .processing-spinner {
+            width: 90px;
+            height: 90px;
+            position: relative;
+        }
+
+        .spinner-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            animation: spin 1.2s linear infinite;
+        }
+
+        .spinner-ring.ring-1 {
+            width: 100%;
+            height: 100%;
+            border-top-color: var(--accent);
+            border-right-color: var(--accent);
+        }
+
+        .spinner-ring.ring-2 {
+            width: 72%;
+            height: 72%;
+            top: 14%;
+            left: 14%;
+            border-top-color: var(--accent-light);
+            border-left-color: var(--accent-light);
+            animation-duration: 0.8s;
+            animation-direction: reverse;
+        }
+
+        .spinner-ring.ring-3 {
+            width: 44%;
+            height: 44%;
+            top: 28%;
+            left: 28%;
+            border-bottom-color: var(--text-primary);
+            border-right-color: var(--text-primary);
+            animation-duration: 0.5s;
+        }
+
+        .processing-text {
+            margin-top: 30px;
+            font-size: 1.2rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .processing-subtext {
+            margin-top: 6px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .processing-dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes dots {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+            100% { content: ''; }
+        }
+
+        /* Register Container */
+        .register-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 500px;
+            padding: 25px;
+        }
+
+        .register-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 45px 40px;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition-slow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent-lighter), var(--accent-soft));
+        }
+
+        .register-card:hover {
+            box-shadow: var(--shadow-xl);
+            border-color: var(--accent-soft);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: logoShine 4s ease-in-out infinite;
+        }
+
+        @keyframes logoShine {
+            0%, 100% { transform: rotate(0deg); opacity: 0; }
+            50% { transform: rotate(180deg); opacity: 0.8; }
+        }
+
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .register-title {
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .register-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 35px;
+        }
+
+        /* Messages */
+        .alert {
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 25px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-error {
+            background: var(--error-light);
+            border: 1px solid var(--error-border);
+            color: var(--error);
+        }
+
+        .alert-success {
+            background: var(--success-light);
+            border: 1px solid var(--success-border);
+            color: var(--success);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .error-list li {
+            padding: 3px 0;
+        }
+
+        .error-list li::before {
+            content: '- ';
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+            transition: var(--transition);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            background: rgba(248, 250, 252, 0.8);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            outline: none;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+        }
+
+        .form-input:focus ~ .input-icon {
+            color: var(--accent);
+        }
+
+        .form-input.error {
+            border-color: var(--error);
+            background: var(--error-light);
+        }
+
+        .form-input.error:focus {
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.08);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 5px;
+            transition: var(--transition);
+            z-index: 1;
+        }
+
+        .password-toggle:hover {
+            color: var(--accent);
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .strength-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .strength-bar.active.weak { background: #ef4444; }
+        .strength-bar.active.medium { background: #f59e0b; }
+        .strength-bar.active.strong { background: #22c55e; }
+
+        .strength-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            min-width: 60px;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.45);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-submit.loading {
+            pointer-events: none;
+            color: transparent;
+        }
+
+        .btn-submit .btn-spinner {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .btn-submit.loading .btn-spinner {
+            display: block;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 28px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .login-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .login-link a:hover {
+            color: var(--accent-dark);
+            text-decoration: underline;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .back-home a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .back-home a:hover {
+            color: var(--accent);
+        }
+
+        .language-switch {
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .lang-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 6px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .lang-option {
+            padding: 7px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .lang-option.active {
+            background: var(--accent);
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
+        }
+
+        .lang-option:hover:not(.active) {
+            color: var(--accent);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .register-card {
+                padding: 35px 25px;
+                border-radius: var(--radius-lg);
+            }
+
+            .register-title {
+                font-size: 1.4rem;
+            }
+
+            .form-input {
+                padding: 13px 14px 13px 44px;
+                font-size: 0.9rem;
+            }
+
+            .btn-submit {
+                padding: 14px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .register-wrapper {
+                padding: 15px;
+            }
+
+            .register-card {
+                padding: 30px 18px;
+            }
+
+            .logo-text {
+                font-size: 1.3rem;
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animations -->
+    <div class="bg-layer">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grid-pattern"></div>
+    <div class="particle-field" id="particleField"></div>
+
+    <!-- Processing Overlay -->
+    <div id="processing-overlay">
+        <div class="processing-spinner">
+            <div class="spinner-ring ring-1"></div>
+            <div class="spinner-ring ring-2"></div>
+            <div class="spinner-ring ring-3"></div>
+        </div>
+        <div class="processing-text">
+            <span id="processing-message">Traitement en cours</span>
+            <span class="processing-dots"></span>
+        </div>
+        <div class="processing-subtext">BeCreative</div>
+    </div>
+
+    <!-- Register Form -->
+    <div class="register-wrapper">
+        <div class="register-card">
+            <div class="logo-container">
+                <a href="/" class="logo">
+                    <div class="logo-icon">B</div>
+                    <span class="logo-text">Be<span>Creative</span></span>
+                </a>
+            </div>
+            <h1 class="register-title" data-fr="Creer un compte" data-en="Create an account">Creer un compte</h1>
+            <p class="register-subtitle" data-fr="Rejoignez BeCreative et commencez a creer" data-en="Join BeCreative and start creating">Rejoignez BeCreative et commencez a creer</p>
+
+            <div class="alert alert-error" id="errorAlert">
+                <ul class="error-list" id="errorList"></ul>
+            </div>
+            <div class="alert alert-success" id="successAlert"></div>
+
+            <form id="registerForm" method="POST" action="/register" onsubmit="handleSubmit(event)" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="name" data-fr="Nom complet" data-en="Full name">Nom complet</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">N</span>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="Votre nom complet" required autocomplete="name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">@</span>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="votre@email.com" required autocomplete="email">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password" data-fr="Mot de passe" data-en="Password">Mot de passe</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">*</span>
+                        <input type="password" id="password" name="password" class="form-input" placeholder="Minimum 6 caracteres" required autocomplete="new-password" minlength="6">
+                        <button type="button" class="password-toggle" onclick="togglePassword('password', this)">O</button>
+                    </div>
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="strength-bar" id="bar1"></div>
+                        <div class="strength-bar" id="bar2"></div>
+                        <div class="strength-bar" id="bar3"></div>
+                        <div class="strength-bar" id="bar4"></div>
+                        <span class="strength-text" id="strengthText"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="confirm_password" data-fr="Confirmer le mot de passe" data-en="Confirm password">Confirmer le mot de passe</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">*</span>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-input" placeholder="Retapez votre mot de passe" required autocomplete="new-password">
+                        <button type="button" class="password-toggle" onclick="togglePassword('confirm_password', this)">O</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <span data-fr="Creer mon compte" data-en="Create my account">Creer mon compte</span>
+                    <div class="btn-spinner"></div>
+                </button>
+            </form>
+
+            <p class="login-link">
+                <span data-fr="Deja un compte ?" data-en="Already have an account?">Deja un compte ?</span> 
+                <a href="/login" data-fr="Connectez-vous" data-en="Login">Connectez-vous</a>
+            </p>
+
+            <div class="language-switch">
+                <div class="lang-btn">
+                    <button class="lang-option active" data-lang="fr" onclick="switchLanguage('fr')">FR</button>
+                    <button class="lang-option" data-lang="en" onclick="switchLanguage('en')">EN</button>
+                </div>
+            </div>
+
+            <div class="back-home">
+                <a href="/" data-fr="Retour a l'accueil" data-en="Back to home">Retour a l'accueil</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            fr: { processing: 'Traitement en cours' },
+            en: { processing: 'Processing' }
+        };
+
+        let currentLang = 'fr';
+
+        function switchLanguage(lang) {
+            if (currentLang === lang) return;
+            currentLang = lang;
+            
+            document.querySelectorAll('.lang-option').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.lang === lang) btn.classList.add('active');
+            });
+            
+            document.querySelectorAll('[data-fr][data-en]').forEach(el => {
+                el.textContent = el.dataset[lang];
+            });
+            
+            document.documentElement.lang = lang;
+            localStorage.setItem('becreative_lang', lang);
+        }
+
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = 'X';
+            } else {
+                input.type = 'password';
+                btn.textContent = 'O';
+            }
+        }
+
+        function checkPasswordStrength(password) {
+            const bars = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3'), document.getElementById('bar4')];
+            const text = document.getElementById('strengthText');
+            
+            bars.forEach(b => { b.classList.remove('active', 'weak', 'medium', 'strong'); });
+            text.textContent = '';
+            
+            if (!password) return;
+            
+            let strength = 0;
+            if (password.length >= 6) strength++;
+            if (password.length >= 10) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            
+            const level = strength <= 1 ? 'weak' : strength <= 3 ? 'medium' : 'strong';
+            const levelText = level === 'weak' ? 'Faible' : level === 'medium' ? 'Moyen' : 'Fort';
+            const activeBars = level === 'weak' ? 1 : level === 'medium' ? 2 : 4;
+            
+            for (let i = 0; i < activeBars; i++) {
+                bars[i].classList.add('active', level);
+            }
+            
+            text.textContent = levelText;
+            text.style.color = level === 'weak' ? '#ef4444' : level === 'medium' ? '#f59e0b' : '#22c55e';
+        }
+
+        function showError(errors) {
+            const alert = document.getElementById('errorAlert');
+            const list = document.getElementById('errorList');
+            list.innerHTML = '';
+            
+            if (typeof errors === 'string') {
+                errors = [errors];
+            }
+            
+            errors.forEach(err => {
+                const li = document.createElement('li');
+                li.textContent = err;
+                list.appendChild(li);
+            });
+            
+            alert.classList.add('show');
+            document.getElementById('successAlert').classList.remove('show');
+        }
+
+        function hideErrors() {
+            document.getElementById('errorAlert').classList.remove('show');
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            hideErrors();
+            
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm_password').value;
+            
+            const errors = [];
+            
+            if (!name) errors.push(currentLang === 'fr' ? 'Le nom est obligatoire' : 'Name is required');
+            if (!email) errors.push(currentLang === 'fr' ? 'L\'email est obligatoire' : 'Email is required');
+            else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push(currentLang === 'fr' ? 'Format email invalide' : 'Invalid email format');
+            if (!password) errors.push(currentLang === 'fr' ? 'Le mot de passe est obligatoire' : 'Password is required');
+            else if (password.length < 6) errors.push(currentLang === 'fr' ? 'Minimum 6 caracteres' : 'Minimum 6 characters');
+            if (password !== confirm) errors.push(currentLang === 'fr' ? 'Les mots de passe ne correspondent pas' : 'Passwords do not match');
+            
+            if (errors.length > 0) {
+                showError(errors);
+                return false;
+            }
+            
+            const overlay = document.getElementById('processing-overlay');
+            document.getElementById('processing-message').textContent = translations[currentLang].processing;
+            overlay.classList.add('active');
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.classList.add('loading');
+            
+            setTimeout(() => {
+                event.target.submit();
+            }, 1800);
+            
+            return false;
+        }
+
+        function createParticles() {
+            const container = document.getElementById('particleField');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = Math.random() * 8 + 8 + 's';
+                const size = Math.random() * 5 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                container.appendChild(particle);
+            }
+        }
+
+        function init() {
+            createParticles();
+            
+            const savedLang = localStorage.getItem('becreative_lang') || 'fr';
+            switchLanguage(savedLang);
+            
+            document.getElementById('password').addEventListener('input', function() {
+                checkPasswordStrength(this.value);
+            });
+            
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.classList.remove('error');
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
